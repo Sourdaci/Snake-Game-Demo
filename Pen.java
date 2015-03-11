@@ -145,4 +145,17 @@ public class Pen
 
     }
 
+    /**
+     * Devuelve la posicion X del Pen
+     */
+    public int getPositionX(){
+        return xPosition;
+    }
+    
+    /**
+     * Devuelve la posicion Y del Pen
+     */
+    public int getPositionY(){
+        return yPosition;
+    }
 }
