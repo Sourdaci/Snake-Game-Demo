@@ -31,6 +31,10 @@ public class SnakeGameDemo
     
     public void drawSnake(){
         int contador = 0;
+        pantalla.erase();
+        serpiente.penUp();
+        serpiente.moveTo(INICIO_X, INICIO_Y);
+        serpiente.penDown();
         do{
             int rotar = aleatorio.nextInt(GIRO.length);
             int x = serpiente.getPositionX();
