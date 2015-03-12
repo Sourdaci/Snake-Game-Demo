@@ -10,16 +10,13 @@ public class SnakePosition
     // instance variables - replace the example below with your own
     private int posX;
     private int posY;
-    private int angulo; // posicion del array que contiene el giro realizado por la serpiente
 
     /**
      * Constructor for objects of class SnakePosition
      */
-    public SnakePosition(int nuevaX, int nuevaY, int giro)
-    {
-        posX = nuevaX;
-        posY = nuevaY;
-        angulo = giro;
+    public SnakePosition(int inicioX, int inicioY){
+        posX = inicioX;
+        posY = inicioY;
     }
 
     public int getPosX(){
@@ -28,9 +25,5 @@ public class SnakePosition
     
     public int getPosY(){
         return posY;
-    }
-    
-    public int getAngulo(){
-        return angulo;
     }
 }

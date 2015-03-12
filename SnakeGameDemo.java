@@ -16,33 +16,103 @@ public class SnakeGameDemo
     private ArrayList<SnakePosition> posiciones;
     private static final int INICIO_X = 200, INICIO_Y = 200;
     private static final int TRAZO = 20;
-    private static final int[] GIRO = {-90, 0, 90};
+    private static final int[] GIRO = {-90, 0, 90, 180};
 
     /**
      * Constructor for objects of class SnakeGameDemo
      */
     public SnakeGameDemo()
     {
-        pantalla = new Canvas("Snake Demo", (INICIO_X * 2), (INICIO_Y * 2));
-        serpiente = new Pen(INICIO_X, INICIO_Y, pantalla);
-        posiciones = new ArrayList<SnakePosition>();
         aleatorio = new Random();
+        pantalla = new Canvas("Snake Demo", (INICIO_X * 2), (INICIO_Y * 2));
+        reinicio();
     }
     
+    /**
+     * Inicia los elementos del juego
+     * Si se ha iniciado un juego, se reiniciaran
+     */
+    private void reinicio(){
+        pantalla.erase();
+        serpiente = new Pen(INICIO_X, INICIO_Y, pantalla);
+        posiciones = new ArrayList<SnakePosition>();
+        posiciones.add(new SnakePosition(INICIO_X, INICIO_Y));
+        serpiente.turn(GIRO[aleatorio.nextInt(GIRO.length)]);
+    }
+    
+    /**
+     * Dibuja la serpiente inicial de 3 segmentos
+     * Es inicio de partida, reinicia la pantalla y la serpiente
+     */
     public void drawSnake(){
         int contador = 0;
-        pantalla.erase();
-        serpiente.penUp();
-        serpiente.moveTo(INICIO_X, INICIO_Y);
-        serpiente.penDown();
+        reinicio();
         do{
-            int rotar = aleatorio.nextInt(GIRO.length);
-            int x = serpiente.getPositionX();
-            int y = serpiente.getPositionY();
+            int rotar = aleatorio.nextInt(GIRO.length - 1);
             serpiente.turn(GIRO[rotar]);
             serpiente.move(TRAZO);
-            posiciones.add(new SnakePosition(x, y, rotar));
+            posiciones.add(new SnakePosition(serpiente.getPositionX(), serpiente.getPositionY()));
             contador++;
         }while (contador < 3);
+    }
+    
+    /**
+     * Dibuja otro segmento de la serpiente
+     */
+    public void makeSnakeBigger(){
+        if(posiciones.size() > 1){
+            ArrayList<Integer> giroTemp = new ArrayList<Integer>();
+            boolean dibujado = false;
+            SnakePosition ultima = posiciones.get(posiciones.size() - 1);
+            for (int i = 0; i< GIRO.length - 1; i++){
+                giroTemp.add(GIRO[i]);
+            }
+            do{
+                int nuevoGiro = aleatorio.nextInt(giroTemp.size());
+                serpiente.penUp();
+                serpiente.turn(giroTemp.get(nuevoGiro));
+                serpiente.move(TRAZO);
+                int posX = serpiente.getPositionX();
+                int posY = serpiente.getPositionY();
+                boolean colision = false;
+                for (int ind = 0; ind < posiciones.size() && !colision; ind++){
+                    SnakePosition temporal = posiciones.get(ind);
+                    if(temporal.getPosX() == posX && temporal.getPosY() == posY 
+                    || posX <= 0 || posY <= 0 || posX >= (INICIO_X * 2) || posY >= (INICIO_Y * 2)){
+                        colision = true;
+                    }
+                }
+                serpiente.moveTo(ultima.getPosX(), ultima.getPosY());
+                serpiente.penDown();
+                if(!colision){
+                    serpiente.move(TRAZO);
+                    int x = serpiente.getPositionX();
+                    int y = serpiente.getPositionY();
+                    posiciones.add(new SnakePosition(x, y));
+                    dibujado = true;
+                }else{
+                    int corregir = giroTemp.get(nuevoGiro);
+                    serpiente.turn( -corregir);
+                    giroTemp.remove(nuevoGiro);
+                }
+            }while(giroTemp.size() > 0 && !dibujado);
+            if(!dibujado){
+                System.out.println("No quedan movimientos, juego acabado.");
+            }
+        }
+    }
+    
+    /**
+     * Dibuja varios fragmentos de Serpiente
+     * El numero debe ser mayor de 0, o no hara nada
+     * 
+     * @param cantidad El numero de trazos de serpiente a dibujar
+     */
+    public void makeSnakeBigger(int cantidad){
+        if(cantidad > 0){
+            for(int i=0; i < cantidad; i++){
+                makeSnakeBigger();
+            }
+        }
     }
 }
