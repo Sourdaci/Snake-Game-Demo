@@ -15,26 +15,19 @@ public class Snake
     private Pen serpiente;
     private Random aleatorio;
     private ArrayList<SnakePosition> posiciones;
-    private static final int INICIO_X = 200, INICIO_Y = 200;
+    private static int INICIO_X = 200, INICIO_Y = 200;
     private static final int TRAZO = 20;
     private static final int[] GIRO = {-90, 0, 90, 180};
 
     /**
      * Constructor for objects of class SnakeGameDemo
      */
-    public Snake()
+    public Snake(int alto, int ancho, Canvas gameCanvas)
     {
         aleatorio = new Random();
-        pantalla = new Canvas("Snake Demo", (INICIO_X * 2), (INICIO_Y * 2));
-        reinicio();
-    }
-    
-    /**
-     * Inicia los elementos del juego
-     * Si se ha iniciado un juego, se reiniciaran
-     */
-    private void reinicio(){
-        pantalla.erase();
+        INICIO_X = alto / 2;
+        INICIO_Y = ancho / 2;
+        pantalla = gameCanvas;
         serpiente = new Pen(INICIO_X, INICIO_Y, pantalla);
         posiciones = new ArrayList<SnakePosition>();
         posiciones.add(new SnakePosition(INICIO_X, INICIO_Y));
@@ -47,7 +40,6 @@ public class Snake
      */
     public void drawSnake(){
         int contador = 0;
-        reinicio();
         do{
             int rotar = aleatorio.nextInt(GIRO.length - 1);
             serpiente.turn(GIRO[rotar]);
