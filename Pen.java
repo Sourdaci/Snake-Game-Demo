@@ -158,4 +158,11 @@ public class Pen
     public int getPositionY(){
         return yPosition;
     }
+    
+    /**
+     * Pide a la pantalla su color de fondo para pintar con el
+     */
+    public void makeColorAsCanvasBackgroundColor(){
+        setColor(canvas.getBackgroundColor());
+    }
 }

@@ -1,6 +1,7 @@
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.awt.Color;
 /**
  * Write a description of class Snake here.
@@ -143,15 +144,19 @@ public class Snake
                     int x = serpiente.getPositionX();
                     int y = serpiente.getPositionY();
                     posiciones.add(new SnakePosition(x, y));
-                    posiciones.remove(0);
-                    pantalla.erase();
+                    Iterator<SnakePosition> iterador = posiciones.iterator();
+                    SnakePosition posTemporal = iterador.next();
+                    iterador.remove();
                     serpiente.penUp();
-                    SnakePosition temporal = posiciones.get(0);
-                    serpiente.moveTo(temporal.getPosX(), temporal.getPosY());
+                    serpiente.moveTo(posTemporal.getPosX(), posTemporal.getPosY());
                     serpiente.penDown();
-                    for (int cont = 1; cont < posiciones.size(); cont++){
-                        temporal = posiciones.get(cont);
-                        serpiente.moveTo(temporal.getPosX(), temporal.getPosY());
+                    posTemporal = iterador.next();
+                    serpiente.makeColorAsCanvasBackgroundColor();
+                    serpiente.moveTo(posTemporal.getPosX(), posTemporal.getPosY());
+                    serpiente.setColor(Color.BLACK);
+                    while (iterador.hasNext()){
+                        posTemporal = iterador.next();
+                        serpiente.moveTo(posTemporal.getPosX(), posTemporal.getPosY());
                     }
                     dibujado = true;
                 }else{
